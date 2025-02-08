@@ -1,73 +1,85 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Loader2, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
 
 const LoginPage = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
+    setError('');
+
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
-      Cookies.set('jwt-token', response.data.token, { expires: 7 });
-      toast.success('Signed in successfully');
-      router.push('/dashboard');
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
+      const response = await axios.post('/api/login', { email, password });
+      const { token } = response.data;
+      Cookies.set('token', token, { expires: 7 });
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid email or password');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className='container flex flex-col items-center justify-center min-h-screen px-4'>
-      <div className='w-full max-w-sm space-y-6'>
-        <div className='text-center'>
-          <h1 className='text-2xl font-semibold'>Sign In</h1>
-        </div>
-        <form onSubmit={handleSubmit} className='space-y-4'>
+    <div className="min-h-screen px-2.5 md:px-10 flex items-center bg-gray-50">
+      <div className="mx-auto px-2.5 md:px-10 space-y-8 p-0 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center">Login</h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <Label htmlFor='email'>Email</Label>
-            <Input
-              id='email'
-              type='email'
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-fuchsia-900"
               required
-              placeholder='you@example.com'
             />
           </div>
           <div>
-            <Label htmlFor='password'>Password</Label>
-            <Input
-              id='password'
-              type='password'
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-fuchsia-900"
               required
-              placeholder='••••••••'
             />
           </div>
-          <Button type='submit' disabled={isLoading} className='w-full'>
-            {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />} Sign In
-          </Button>
+          <div>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center px-4 py-2 bg-fuchsia-900 text-white rounded-md hover:bg-fuchsia-800"
+            >
+              {loading ? <Loader2 className="animate-spin h-5 w-5 mr-2" /> : 'Login'}
+            </Button>
+          </div>
         </form>
-        <div className='text-center text-sm'>
-          Don't have an account?
-          <Link href='/sign-up' className='ml-1 text-blue-600 hover:underline'>Sign Up <ArrowRight className='inline h-4 w-4' /></Link>
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-medium text-fuchsia-900 hover:text-fuchsia-800">
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

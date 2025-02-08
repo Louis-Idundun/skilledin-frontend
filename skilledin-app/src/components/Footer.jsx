@@ -5,13 +5,13 @@ import Wrapper from './Wrapper';
 const Footer = () => {
   const location = useLocation();
   const pathsToMinimize = [
-    '/verify-email',
-    '/sign-up',
-    '/sign-in',
+    // '/verify-email',
+    // '/sign-up',
+    // '/sign-in',
   ];
 
   return (
-    <footer className="bg-neutral-900 text-white flex-grow-0">
+    <footer className="mx-auto w-screen px-2.5 md:px-10 bg-neutral-900 text-white flex-grow-0">
       <Wrapper>
         <div>
           {pathsToMinimize.includes(location.pathname) ? null : (

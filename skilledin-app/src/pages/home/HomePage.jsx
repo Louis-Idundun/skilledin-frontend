@@ -77,10 +77,11 @@ const testimonials = [
 export default function HomePage() {
   return (
     <>
+    <div className='w-full'>
       {/* Hero Section */}
-      <section className="bg-fuchsia-50">
+      <section className="w-screen bg-fuchsia-50">
         <Wrapper>
-          <div className="py-20 mx-auto text-center flex flex-col sm:flex-row items-center max-w-7xl">
+          <div className="py-20 w-full mx-auto text-center flex flex-col sm:flex-row items-center">
             {/* Image on the left side */}
             <div className="flex-shrink-0 w-full sm:w-1/2">
               <img
@@ -118,7 +119,7 @@ export default function HomePage() {
       </section>
 
       {/* Schools Section */}
-      <section className="border-t border-gray-200 bg-gray-50">
+      <section className="mx-auto w-screen px-2.5 md:px-10 border-t border-gray-200 bg-gray-50">
         <Wrapper className="py-20">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-10">
             Our Schools
@@ -260,7 +261,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-neutral-950">
+      <section className="mx-auto w-screen px-2.5 md:px-10 py-20 bg-neutral-950">
         <Wrapper>
           <h2 className="text-3xl font-bold text-white text-center mb-10">
             TESTIMONIALS
@@ -289,6 +290,8 @@ export default function HomePage() {
           </div>
         </Wrapper>
       </section>
+      </div>
     </>
+    
   );
 }
